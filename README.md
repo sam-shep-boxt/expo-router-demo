@@ -1,4 +1,4 @@
-# Welcome to your Expo app 👋
+# Expo router demo 🤠
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
@@ -23,28 +23,36 @@ In the output, you'll find options to open the app in a
 - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
 - [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Screen not found
+If there is a deeplink pressed to a screen that doesnt exist, it will automatically show the screen in `app/+not-found.tsx`
 
-## Get a fresh project
+Further work and thought needs to go into when the user is linked to a valid screen but with invalid data
 
-When you're ready, run:
+## Authentication + deep links
 
-```bash
-npm run reset-project
-```
+I have created a protected route hook `hooks/useProtectedRoute.ts` that monitors the change in navigation and deeplinks etc to ensure that we have the concept of authenticated and non-authenticated screens.
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+If the user is logged out but presses a deeplink to an authenticated page, it will save the link and re-direct you to that screen when you log in. This works for the deeplink opening the app and also when used while the app is already running
 
-## Learn more
+Further work is required to check the routes against a blacklist to stop people skipping into unwanted flows
 
-To learn more about developing your project with Expo, look at the following resources:
+|Description|Cmd|
+|-|-|
+|Sign up screen (non-auth)|`npx uri-scheme open "exp://127.0.0.1:8081/--/sign-up" --ios`|
+|Settings screen (auth)|`npx uri-scheme open "exp://127.0.0.1:8081/--/settings" --ios`|
+|Specific fish screen (auth with params)|`npx uri-scheme open "exp://127.0.0.1:8081/--/fish/1?name=Flounder" --ios`|
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Tabs
 
-## Join the community
+In this project you can see an example of tabs being used. When you log in, it will put you at the "Home page" where the tabs are visible. On the fish list screen, there is an example of navigating away from the tabs.
 
-Join our community of developers creating universal apps.
+Questions:
+1. How do we navigate back to the tabs easily if we used a deeplink to get to that screen
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Url generation
+There is a rough script in `scripts/generate-urls.js` (needs adjusting of directory, works fine in root but not adjusted to work in script folder) which will spit out a list of all the routes you can deep link to -> which will be useful for non-technical people to use
+
+
+
+
+
