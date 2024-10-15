@@ -1,0 +1,5 @@
+jest/.cache/
+coverage/
+ios/
+config/
+android/
